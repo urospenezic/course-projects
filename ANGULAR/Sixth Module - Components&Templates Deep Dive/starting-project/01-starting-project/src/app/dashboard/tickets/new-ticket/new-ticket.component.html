@@ -1,0 +1,14 @@
+<form (ngSubmit)="onSubmit(titleInput.value, requestTextarea.value)" #mainForm>
+  <app-input label="Title">
+    <input name="title" id="title" #titleInput #input /><!-- input will be picked up by the input component as the projected content-->
+  </app-input>
+  <app-input label="Request">
+    <textarea name="request" id="request" rows="3" #requestTextarea></textarea><!--#requestTextarea is a tempalte variable, it is a reference to the textarea element. in wpf terms, its like x:name-->
+  </app-input>
+  <p>
+    <button appIconButton>
+      Submit
+      <span ngProjectAs="icon"> ⌲ </span>
+    </button>
+  </p>
+</form>

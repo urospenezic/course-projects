@@ -1,0 +1,7 @@
+<ul>
+  @for (message of messages(); track message) {<!-- we can use the pipe to listen to changes by doing: messages$ | async -->
+    <li>{{ message }}</li>
+  }
+</ul>
+
+<p class="debug-output">{{ debugOutput }}</p>

@@ -1,0 +1,41 @@
+<main>
+  <article class="temperatures">
+    <header>
+      <img src="temp-icon.png" alt="Thermometer icon" />
+      <div>
+        <h2>Current Temperatures</h2>
+        <p>{{ currentDate | date : "medium" }}</p>
+        <!--we customize a pipe by doing :'someValue'-->
+      </div>
+    </header>
+    <p>New York: {{ currentTemperaturs.newYork | number : "1.1-2" }}</p>
+    <!--number is defined as 1 number before the that and a max of 1 to 2 numbers as decimals-->
+    <p>Berlin: {{ currentTemperaturs.berlin | temperature : "C" : "F" }}</p>
+    <!--we're specifying that input is in celsius, but the pipe should convert it to fahrenheit-->
+    <p>
+      Paris:
+      {{
+        currentTemperaturs.paris | number : "1.1-2" | temperature : "C" : "F"
+      }}
+    </p>
+    <!--we're specifying that output should have 1 or 2 decimals, and also specifying that input is in celsius, but the pipe should convert it to fahrenheit THIS IS CALLED PIPE CHAINING-->
+    <p>Chicago: {{ currentTemperaturs.chicago | temperature : "C" }}</p>
+    <!-- just setting the input to celsius, so the output will be in celsius-->
+  </article>
+
+  <article class="temperatures">
+    <header>
+      <img src="temp-icon.png" alt="Thermometer icon" />
+      <div>
+        <h2>Historic Temperatures</h2>
+        <p>Berlin</p>
+      </div>
+    </header>
+    <ul>
+      @for (temperature of historicTemperatures | sort:'asc'; track temperature)
+      {
+      <li (click)="onReset($index)">{{ temperature | temperature : "C" }}</li>
+      }
+    </ul>
+  </article>
+</main>

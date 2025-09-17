@@ -1,0 +1,9 @@
+<div>
+  <!-- since user is a signal, we bind that signal to routerLink (that way router link will be updated when user changes)
+   note: by doing ['/users', user().id] - angular will merge them into a single string with / between them-->
+  <a [routerLink]="['/users', user().id, 'tasks']" routerLinkActive="selected"
+    ><!--routerLinkActive is a directive that sets a css class based on the active route-->
+    <img [src]="imagePath()" [alt]="user().name" />
+    <span>{{ user().name }}</span>
+  </a>
+</div>

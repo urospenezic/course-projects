@@ -1,0 +1,11 @@
+<main>
+  <app-learning-resources/>
+
+  <hr />
+
+  <app-auth/>
+  <p *appAuth="'admin'">Only admins can access the protected content!</p><!--appAuth is a structural directive, adding * in front of the directive is a syntactic sugar for using ng-template under the hood-->
+  <!-- <ng-template appAuth="admin">
+    <p>Only admins can access the protected content!</p>
+  </ng-template> -->
+</main>

@@ -1,0 +1,14 @@
+<section id="tasks">
+  <header>
+    <h2>{{ username() }}'s Tasks</h2>
+    <menu>
+      <!--THIS IS A RELATIVE LINK, SO WE DO NOT NEED TO ADD THE USER ID TO THE LINK, IT IS A LINK RELATIVE TO THE CURRENT ROUTE
+      CHECK THE USER COMPONENT FOR ROUTE LINK BINDING FOR STANDARD LINKS-->
+      <a routerLink="tasks/new">Add Task</a>
+    </menu>
+  </header>
+
+  <!-- WITHOUT NESTED ROUTES:
+  <app-tasks [tasks]="tasks()" /> -->
+  <router-outlet/>
+</section>

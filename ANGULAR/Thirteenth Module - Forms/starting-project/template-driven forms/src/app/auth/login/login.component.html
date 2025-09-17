@@ -1,0 +1,51 @@
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+  <h2>Login</h2>
+
+  <div class="control-row">
+    <div class="control no-margin">
+      <label for="email">Email</label>
+      <!-- any piece of template that uses ngModel has to have a name attribute-->
+      <!-- since we are using ngModel, there are css classes automatically added to the input element that we can use to style the input element, like ng-touched, ng-dirty, ng-valid, ng-invalid, etc. 
+        TAKE A LOOK AT STYLES.CSS WHERE WE HAVE A SELECTOR FOR EACH OF THESE CLASSES LIKE: 
+        .control:has(.ng-invalid.ng-touched.ng-dirty) label {
+          color: #ff0000;
+        }
+        -->
+      <input
+        id="email"
+        type="email"
+        ngModel
+        name="email"
+        required
+        email
+        #emailCtl="ngModel"
+      /><!-- #emailCtl="ngModel" is syntax supported by ngModel directive that tells angular that we wanna store this control created by angular into a variable called emailCtl-->
+      <!-- ngModel register an input element with angular, so ofc its not just for 2way binding-->
+    </div>
+
+    <div class="control no-margin">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        ngModel
+        name="password"
+        required
+        minlength="6"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+        #passwordCtl="ngModel"
+      />
+    </div>
+
+    <button class="button">Login</button>
+  </div>
+  <!-- this will result in an error for accessing undefined object
+   the reason for that is that ngForm is not available the first time template is rendered, since its a wrapper around the template
+   and thats where template driven forms start getting tricky to use because we have to start using template variables to access elements-->
+  @if(emailCtl.touched && emailCtl.dirty && emailCtl.invalid) {
+  <p class="control-error">Please enter a valid email.</p>
+  }
+  @if(passwordCtl.touched && passwordCtl.dirty && passwordCtl.invalid) {
+  <p class="control-error">Please enter a valid password. Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character.</p>
+  }
+</form>

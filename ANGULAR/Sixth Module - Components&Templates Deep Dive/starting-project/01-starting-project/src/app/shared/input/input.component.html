@@ -1,0 +1,10 @@
+<!-- <p class="control"> WE CAN OMMIT THIS AND SET CLASS TO CONTROL WHEREVER WE USE <app-input> BECAUSE THAT IS THE HOST ELEMENT, SO WILL BE RENDERED DIRECTLY IN THE DOM
+    OR JUST SET THAT CLASS DYNAMICALLY FROM WITHIN THE COMPONENT. SO IN THE DOM IT WILL LOOK LIKE <app-input class="control"><label>...</label>...</app-input> -->
+  <label>{{ label() }}</label>
+  <!-- NOTE: angular does not see the future content that gets passed to ng content in css, so styling input and textarea directly via .control input or .control textarea in css is not possible
+   to get aroung this, we have to import ViewEncapsulation and set in in component decorator as encapsulation: ViewEncapsulation.None (its an enum)
+   DEFAULT VALUE IS ViewEncapsulation.Emulated, which means that angular will emulate the browser shadow DOM - meaning the styles are scoped to the component
+   ViewEncapsulation.ShadowDom - uses the real browser shadow DOM, but that is not supported by all browsers, so emulated is the default 
+   ViewEncapsulation.None - means that the styles are not scoped to the component, and will apply to the whole application-->
+  <ng-content select="input, textarea"/><!--we can also use select to restrict the type of content that can be passed to the component-->
+<!-- </p> -->

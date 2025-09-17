@@ -1,0 +1,29 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- no need to pass arguments to onSubmit() because it is defined in the code behind-->
+  <!-- formGroup is a directive that binds the form to the form group defined in code behind -->
+  <!-- (ngSubmit) is a directive that listens for the submit event and calls the onSubmit method in the code behind -->
+  <h2>Login</h2>
+
+  <div class="control-row">
+    <div class="control no-margin">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+      /><!-- bind this element to the control defined in code behind (alternative way is [formControl] = "form.controls.email" )-->
+    </div>
+
+    <div class="control no-margin">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" />
+    </div>
+
+    <button class="button">Login</button>
+  </div>
+  @if(isEmailInvalid) {
+  <p class="control-error">Please enter a valid email</p>
+  } @if(isPasswordInvalid) {
+  <p class="control-error">Please enter a valid password</p>
+  }
+</form>

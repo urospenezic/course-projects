@@ -1,0 +1,15 @@
+<div>
+  <ul>
+    @for(ticket of tickets(); track ticket.id) {
+    <li>
+      <app-ticket [ticket]="ticket" (statusUpdated)="updateTicketStatus($event)" />
+    </li>
+    } @empty {
+    <p>No tickets found</p>
+    }
+  </ul>
+</div>
+
+<div id="new-ticket">
+  <app-new-ticket (ticketCreated)="onTicketCreated($event)" (keyDown)="onKeyDown($event)"/>
+</div>
