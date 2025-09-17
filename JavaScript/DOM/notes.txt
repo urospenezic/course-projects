@@ -1,0 +1,6 @@
+2 big global object that the browser exposes to work with are "document" and "window"
+
+
+document - root DOM node - provides acess to elelent querying, DOM content etc
+
+window - the active browser window/tab -> acts as global storage for script, also access to window specific properties and stuff

@@ -1,0 +1,95 @@
+var is the old way of doing let, the downside is that if you declare var in a block (if statement or any block except function) - it will be visible outside of the block
+
+strict mode - enable strict mode via entering 'use strict';//as string - this will force us to use strict lang models, like it won't let us declare a variable like varName = 'smt'. it will force let var='smt';
+
+Changes in strict mode
+Strict mode changes both syntax and runtime behavior. Changes generally fall into these categories:
+
+changes converting mistakes into errors (as syntax errors or at runtime)
+changes simplifying how variable references are resolved
+changes simplifying eval and arguments
+changes making it easier to write "secure" JavaScript
+changes anticipating future ECMAScript evolution.
+
+
+
+====================================
+
+
+
+functions are stored in the heap like refs
+
+JS is single-threaded - hello UI thread my old friend
+
+event loop besides stack follows async/events that run in the background. (like listeners)
+
+
+value types: Strings, Numbers, bools, null, undefined, Symbol
+
+ref (stored in heap): everything else (arrays, object...)
+
+
+------------------------------------------------------------------------------------
+
+Essentially, you can split the code you write into these two pieces:
+
+1) The JavaScript Language
+Understands core syntax (let, const etc) but does NOT know anything about the DOM for example
+
+2) Browser APIs
+Not responsible for understanding your code (that's what 1) does) but instead responsible for exposing APIs like the DOM API which you can use from inside your script code.
+
+
+
+The JavaScript language (1) is advanced by the Ecma International Technical Committee 39 (TC39), which is a group that's part of the Ecma organization. It's responsible for adding new features to the JavaScript language itself. For example, in the past, it was responsible for adding let and const.
+
+You can learn more about TC39 here: https://tc39.es/
+
+And you can explore the current proposals that are being discussed by that group - features that potentially make it into the core JavaScript language in the future: https://github.com/tc39/proposals
+
+IMPORTANT: Just because a feature becomes part of the language does NOT mean that all JavaScript engines immediately support that feature. Of course the people developing the engines are doing their best to provide support as soon as possible but that process simply also takes time.
+
+On the other hand, engine vendors also sometimes start supporting certain features BEFORE TC39 made a feature an official part of JavaScript. Because in the end, it's of course totally up to the people working on the engines to decide which syntax their JS engine understands.
+
+
+
+Browser APIs also are standardized because the different browser vendors (Google for Chrome, Microsoft for Edge etc.) of course want to (roughly) provide feature parity and similar APIs. It wouldn't be a great developer experience if you had different functions which you need to call to make your scripts work in different browsers. Although, in the past, this was pretty normal.
+
+Nowadays, thankfully, this is getting way better because there also is a working group that works on browser APIs - so that different features and APIs in different browsers are avoided as good as possible.
+
+That working group has the name WHATWG and you can learn more about it here: https://whatwg.org/
+
+If you're interested in learning more about the APIs that were/ are "managed" by this group, you can check this site: https://spec.whatwg.org/
+
+-------------------------------------------------------------------------------------------------------------------------
+
+
+GC: https://v8.dev/blog/free-garbage-collection
+
+no matter how many times you add an event listener via control.addEventListener, the browser and JS will just remove the prev one and reatach it again, so we cannot run into scenario where we have subscribed to the same event 15 times and output 15 times the same result
+
+NOTE, THIS WILL MEMORY LEAK:
+
+btn1.addEventListener('click', addListener);
+
+function addListener(){
+
+	btn2.addEventListener('click', function() { //the js with anonymous functions will just generate a new object for that func no matter what's inside, so we'll leak
+		const value = smt;
+		console.log(value);
+	}
+}
+
+
+THIS WON'T:
+
+...
+function printMsg(){
+	const value = smt;
+	console.log(value);
+}
+
+function addListener(){
+	btn2.addEventListener('click', printMsg);
+}
+

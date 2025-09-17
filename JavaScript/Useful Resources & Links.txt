@@ -1,0 +1,45 @@
+Useful Resources & Links
+Attached, you find the source code for this section. The snapshots are also attached to individual lectures throughout this module (i.e. the lectures to which each snapshot belongs).
+
+---
+
+The following resources may be helpful.
+
+Please keep in mind that this course is structured differently and builds up knowledge step by step - the linked articles don't necessarily do that and hence can easily be overwhelming. So going through them is optional and neither required nor necessarily recommended at this point of time:
+
+MDN => JavaScript Basics: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+MDN => Variables: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/Variables
+
+MDN => Operators: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/Math
+
+MDN => Functions: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Functions
+
+MDN => Arrays: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/Arrays
+
+MDN => Objects: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Basics
+
+VS Code Docs: https://code.visualstudio.com/docs
+
+VS Code Keybindings: https://code.visualstudio.com/docs/getstarted/keybindings
+
+VS Code Extensions Docs: https://code.visualstudio.com/docs/editor/extension-gallery
+
+Google Chrome DevTools Docs: https://developers.google.com/web/tools/chrome-devtools/
+
+Control Structures (MDN): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling
+
+JavaScript Loops (MDN): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration
+
+More on Functions (MDN): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions
+
+bind(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+
+More on the this keyword (MDN): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
+
+Classes on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+
+Constructor Functions (MDN): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects#Using_a_constructor_function
+
+Prototypes (MDN): https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes
+
