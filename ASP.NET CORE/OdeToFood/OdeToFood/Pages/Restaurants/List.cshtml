@@ -1,0 +1,30 @@
+﻿@page
+@model OdeToFood.Pages.ListModel
+@{
+}
+
+<h1>Restaurants</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Cuisine</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Restaurants != null && Model.Restaurants.Any())
+        {
+            foreach (var restaurant in Model.Restaurants)
+            {
+                <tr>
+                    <td>@restaurant.Name</td>
+                    <td>@restaurant.Cuisine</td>
+                    <td>@restaurant.Location</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div>@Model.Message</div>
