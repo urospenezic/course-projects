@@ -5,6 +5,16 @@
 
 <h1>Restaurants</h1>
 
+<form method="get">
+    <div class="input-group mb-3">
+        <input type="search" name="SearchTerm" class="form-control" placeholder="Search restaurants..."
+            asp-for="SearchTerm" />
+        <button type="submit" class="btn btn-outline-secondary">
+            <i class="bi bi-search"></i>
+        </button>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -22,9 +32,14 @@
                     <td>@restaurant.Name</td>
                     <td>@restaurant.Cuisine</td>
                     <td>@restaurant.Location</td>
+                    <td>
+                        <a asp-page="./Details" asp-route-restaurantId="@restaurant.Id" class="btn btn-info">
+                            Details
+                        </a>
+                    </td>
                 </tr>
             }
         }
     </tbody>
 </table>
-<div>@Model.Message</div>
+@* <div>@Model.Message</div> *@

@@ -1,0 +1,14 @@
+﻿@page
+@model MyApp.Namespace.DetailsModel
+@{ 
+    ViewData["Title"] = "Restaurant Details";
+}
+
+<h2>@Model.Restaurant.Name</h2>
+
+<div>
+    <p>Cuisine: @Model.Restaurant.Cuisine</p>
+    <p>Location: @Model.Restaurant.Location</p>
+</div>
+
+<a asp-page="=./List" class="btn btn-primary">All Restaurants</a>
