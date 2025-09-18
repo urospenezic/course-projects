@@ -1,22 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OdeToFood.Core;
+using OdeToFood.Data;
 
 namespace MyApp.Namespace
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel(IRestaurantData restaurantData) : PageModel
     {
+        private readonly IRestaurantData _restaurantData = restaurantData;
+
         public required Restaurant Restaurant { get; set; }
 
-        public void OnGet(int restaurantId)
+        public IActionResult OnGet(int restaurantId)
         {
-            Restaurant = new Restaurant()
+            Restaurant = _restaurantData.GetById(restaurantId);
+            if (Restaurant == null)
             {
-                Id = restaurantId,
-                Name = "My Restaurant",
-                Cuisine = CuisineType.None,
-                Location = "My Location",
-            };
+                return RedirectToPage("./NotFound");
+            }
+            return Page();
         }
     }
 }
