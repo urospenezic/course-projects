@@ -7,6 +7,12 @@ public interface IRestaurantData
     IEnumerable<Restaurant> GetRestaurantsByName(string name);
 
     Restaurant GetById(int id);
+
+    Restaurant Update(Restaurant updatedRestaurant);
+
+    int Commit();
+
+    Restaurant Add(Restaurant newRestaurant);
 }
 
 public class InMemoryRestaurantData : IRestaurantData
@@ -41,6 +47,15 @@ public class InMemoryRestaurantData : IRestaurantData
         ];
     }
 
+    public Restaurant Add(Restaurant newRestaurant)
+    {
+        _restaurants.Add(newRestaurant);
+        newRestaurant.Id = _restaurants.Max(r => r.Id) + 1;
+        return newRestaurant;
+    }
+
+    public int Commit() => 0;
+
     public Restaurant GetById(int id)
     {
         return _restaurants.FirstOrDefault(r => r.Id == id);
@@ -55,5 +70,18 @@ public class InMemoryRestaurantData : IRestaurantData
         });
 
         return query.OrderBy(restaurant => restaurant.Name);
+    }
+
+    public Restaurant Update(Restaurant updatedRestaurant)
+    {
+        var restaurant = GetById(updatedRestaurant.Id);
+        if (restaurant != null)
+        {
+            restaurant.Name = updatedRestaurant.Name;
+            restaurant.Location = updatedRestaurant.Location;
+            restaurant.Cuisine = updatedRestaurant.Cuisine;
+        }
+
+        return restaurant;
     }
 }

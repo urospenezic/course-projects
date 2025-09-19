@@ -34,7 +34,12 @@
                     <td>@restaurant.Location</td>
                     <td>
                         <a asp-page="./Details" asp-route-restaurantId="@restaurant.Id" class="btn btn-info">
-                            Details
+                            <i class="bi bi-search"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-restaurantId="@restaurant.Id" class="btn btn-info">
+                            <i class="bi bi-pencil"></i>
                         </a>
                     </td>
                 </tr>
@@ -42,4 +47,6 @@
         }
     </tbody>
 </table>
+
+<a asp-page="./Edit" class="btn btn-primary">Add New Restaurant</a>
 @* <div>@Model.Message</div> *@
