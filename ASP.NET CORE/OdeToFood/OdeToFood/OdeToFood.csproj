@@ -8,4 +8,7 @@
     <ProjectReference Include="..\OdeToFood.Core\OdeToFood.Core.csproj" />
     <ProjectReference Include="..\OdeToFood.Data\OdeToFood.Data\OdeToFood.Data.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
+  </ItemGroup>
 </Project>
