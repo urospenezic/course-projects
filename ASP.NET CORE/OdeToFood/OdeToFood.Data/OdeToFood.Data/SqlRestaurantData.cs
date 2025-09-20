@@ -3,14 +3,9 @@ using OdeToFood.Core;
 
 namespace OdeToFood.Data;
 
-public class SqlRestaurantData : IRestaurantData
+public class SqlRestaurantData(OdeToFoodDbContext context) : IRestaurantData
 {
-    private readonly OdeToFoodDbContext _context;
-
-    public SqlRestaurantData(OdeToFoodDbContext context)
-    {
-        _context = context;
-    }
+    private readonly OdeToFoodDbContext _context = context;
 
     public Restaurant Add(Restaurant newRestaurant)
     {
@@ -21,6 +16,16 @@ public class SqlRestaurantData : IRestaurantData
     public int Commit()
     {
         return _context.SaveChanges();
+    }
+
+    public Restaurant Delete(int id)
+    {
+        var restaurant = GetById(id);
+        if (restaurant != null)
+        {
+            _context.Restaurants.Remove(restaurant);
+        }
+        return restaurant ?? new Restaurant();
     }
 
     public Restaurant GetById(int id)
@@ -41,7 +46,7 @@ public class SqlRestaurantData : IRestaurantData
 
     public Restaurant Update(Restaurant updatedRestaurant)
     {
-        var entity = _context.Entry(updatedRestaurant);
+        var entity = _context.Attach(updatedRestaurant);
         entity.State = EntityState.Modified;
         return updatedRestaurant;
     }

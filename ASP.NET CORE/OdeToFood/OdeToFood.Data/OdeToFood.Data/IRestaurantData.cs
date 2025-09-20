@@ -13,6 +13,8 @@ public interface IRestaurantData
     int Commit();
 
     Restaurant Add(Restaurant newRestaurant);
+
+    Restaurant Delete(int id);
 }
 
 public class InMemoryRestaurantData : IRestaurantData
@@ -56,9 +58,20 @@ public class InMemoryRestaurantData : IRestaurantData
 
     public int Commit() => 0;
 
+    public Restaurant Delete(int id)
+    {
+        var resturant = _restaurants.FirstOrDefault(r => r.Id == id);
+        if (resturant != null)
+        {
+            _restaurants.Remove(resturant);
+        }
+
+        return resturant ?? new Restaurant();
+    }
+
     public Restaurant GetById(int id)
     {
-        return _restaurants.FirstOrDefault(r => r.Id == id);
+        return _restaurants.FirstOrDefault(r => r.Id == id) ?? new Restaurant();
     }
 
     public IEnumerable<Restaurant> GetRestaurantsByName(string? name = null)
@@ -82,6 +95,6 @@ public class InMemoryRestaurantData : IRestaurantData
             restaurant.Cuisine = updatedRestaurant.Cuisine;
         }
 
-        return restaurant;
+        return restaurant ?? new Restaurant();
     }
 }
