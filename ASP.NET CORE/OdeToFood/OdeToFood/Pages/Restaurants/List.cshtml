@@ -15,38 +15,10 @@
     </div>
 </form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Cuisine</th>
-            <th>Location</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Restaurants != null && Model.Restaurants.Any())
-        {
-            foreach (var restaurant in Model.Restaurants)
-            {
-                <tr>
-                    <td>@restaurant.Name</td>
-                    <td>@restaurant.Cuisine</td>
-                    <td>@restaurant.Location</td>
-                    <td>
-                        <a asp-page="./Details" asp-route-restaurantId="@restaurant.Id" class="btn btn-info">
-                            <i class="bi bi-search"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a asp-page="./Edit" asp-route-restaurantId="@restaurant.Id" class="btn btn-info">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                    </td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+@foreach (var restaurant in Model.Restaurants ?? Array.Empty<OdeToFood.Core.Restaurant>())
+{
+    <partial name="_Summary" model="restaurant" />
+}
 
 <a asp-page="./Edit" class="btn btn-primary">Add New Restaurant</a>
 @* <div>@Model.Message</div> *@

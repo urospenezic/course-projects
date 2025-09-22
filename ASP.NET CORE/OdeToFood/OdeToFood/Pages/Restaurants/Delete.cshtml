@@ -1,0 +1,23 @@
+﻿@page "{restaurantId:int}"
+@model MyApp.Namespace.DeleteModel
+@{
+    ViewData["Title"] = "Delete Restaurant";
+}
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Delete Restaurant</title>
+</head>
+
+<body>
+    <h1>Delete Restaurant</h1>
+    <form method="post">
+        <div class="alert alert-danger">Are you sure you want to delete the restaurant <strong>@Model.Restaurant.Name</strong>?</div>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-page="./List" class="btn btn-secondary">Cancel</a>
+    </form>
+</body>
+
+</html>

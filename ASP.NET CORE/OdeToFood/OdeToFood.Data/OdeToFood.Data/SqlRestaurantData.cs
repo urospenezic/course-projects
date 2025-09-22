@@ -33,6 +33,11 @@ public class SqlRestaurantData(OdeToFoodDbContext context) : IRestaurantData
         return _context.Restaurants.Find(id) ?? new Restaurant();
     }
 
+    public int GetCountOfRestaurants()
+    {
+        return _context.Restaurants.Count();
+    }
+
     public IEnumerable<Restaurant> GetRestaurantsByName(string name)
     {
         var query =

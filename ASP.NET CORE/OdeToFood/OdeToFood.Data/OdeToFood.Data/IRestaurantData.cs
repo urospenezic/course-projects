@@ -15,6 +15,8 @@ public interface IRestaurantData
     Restaurant Add(Restaurant newRestaurant);
 
     Restaurant Delete(int id);
+
+    int GetCountOfRestaurants();
 }
 
 public class InMemoryRestaurantData : IRestaurantData
@@ -72,6 +74,11 @@ public class InMemoryRestaurantData : IRestaurantData
     public Restaurant GetById(int id)
     {
         return _restaurants.FirstOrDefault(r => r.Id == id) ?? new Restaurant();
+    }
+
+    public int GetCountOfRestaurants()
+    {
+        return _restaurants.Count;
     }
 
     public IEnumerable<Restaurant> GetRestaurantsByName(string? name = null)

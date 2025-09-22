@@ -1,0 +1,26 @@
+﻿@using OdeToFood.Core
+@model Restaurant
+
+<div class="card mb-3 shadow-sm">
+    <img src="https://picsum.photos/400/200" class="card-img-top" alt="Restaurant Image" style="height: 200px; object-fit: cover;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">
+            <span class="badge bg-primary mb-2">@Model.Cuisine</span><br />
+            <i class="bi bi-geo-alt"></i> @Model.Location
+        </p>
+    </div>
+    <div class="card-footer bg-transparent">
+        <div class="btn-group" role="group" aria-label="Restaurant actions">
+            <a asp-page="./Details" asp-route-restaurantId="@Model.Id" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-eye"></i> Details
+            </a>
+            <a asp-page="./Edit" asp-route-restaurantId="@Model.Id" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-pencil"></i> Edit
+            </a>
+            <a asp-page="./Delete" asp-route-restaurantId="@Model.Id" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash"></i> Delete
+            </a>
+        </div>
+    </div>
+</div>
