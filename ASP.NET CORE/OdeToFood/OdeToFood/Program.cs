@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddControllers(); // Add API Controllers support
 builder.Services.AddDbContextPool<OdeToFoodDbContext>(options =>
 {
     options.UseSqlite(
@@ -26,11 +27,26 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Serve static files from node_modules in development
+if (app.Environment.IsDevelopment())
+{
+    app.UseStaticFiles(
+        new StaticFileOptions
+        {
+            FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "node_modules")
+            ),
+            RequestPath = "/node_modules",
+        }
+    );
+}
+
 app.UseRouting();
 
 app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
+app.MapControllers(); // Map API Controllers
 
 app.Run();
