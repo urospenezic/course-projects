@@ -39,14 +39,31 @@ if (app.Environment.IsDevelopment())
             RequestPath = "/node_modules",
         }
     );
+
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.Use(SayHelloMiddleware); //simulate middleware
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
 app.MapControllers(); // Map API Controllers
+
+RequestDelegate SayHelloMiddleware(RequestDelegate @delegate)
+{
+    return async context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/hello"))
+        {
+            await context.Response.WriteAsync("Hello, World!");
+        }
+        else
+        {
+            await @delegate(context);
+        }
+    };
+}
 
 app.Run();
