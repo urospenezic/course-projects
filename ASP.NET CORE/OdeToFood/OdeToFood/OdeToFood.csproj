@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="node_modules\**" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\OdeToFood.Core\OdeToFood.Core.csproj" />
     <ProjectReference Include="..\OdeToFood.Data\OdeToFood.Data\OdeToFood.Data.csproj" />
   </ItemGroup>

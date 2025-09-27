@@ -17,6 +17,15 @@ builder.Services.AddScoped<IRestaurantData, SqlRestaurantData>();
 
 var app = builder.Build();
 
+MigrateDatabase();
+
+void MigrateDatabase()
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<OdeToFoodDbContext>();
+    dbContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
