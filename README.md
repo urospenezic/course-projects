@@ -1,2 +1,2 @@
 # course-projects
-Mini projects completed through various courses.
+A hellscape through my endless tutorial hell.
