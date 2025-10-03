@@ -1,22 +1,22 @@
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-public class AccountController(AppDbContext context) : BaseApiController
+public class AccountController(AppDbContext context, ITokenService tokenService) : BaseApiController
 {
-    private readonly AppDbContext _context = context;
-
     [HttpPost("login")]
-    public async Task<ActionResult<AppUser>> Login(LoginDto loginDto)
+    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var email = loginDto.Email.ToLower();
         var password = loginDto.Password;
 
-        var user = await _context.Users.SingleOrDefaultAsync(x =>
+        var user = await context.Users.SingleOrDefaultAsync(x =>
             x.Email.ToLower() == email.ToLower()
         );
         if (user is null)
@@ -35,11 +35,11 @@ public class AccountController(AppDbContext context) : BaseApiController
         }
 
         hmac.Dispose();
-        return Ok(user);
+        return Ok(user.ToDto(tokenService));
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<AppUser>> Register(RegisterDto registerDto)
+    public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         var displayName = registerDto.DisplayName;
         var email = registerDto.Email.ToLower();
@@ -59,15 +59,15 @@ public class AccountController(AppDbContext context) : BaseApiController
             PasswordSalt = hmac.Key,
         };
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
 
         hmac.Dispose();
-        return Ok(user);
+        return Ok(user.ToDto(tokenService));
     }
 
     private async Task<bool> EmailExists(string email)
     {
-        return await _context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower());
+        return await context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower());
     }
 }

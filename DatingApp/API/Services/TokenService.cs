@@ -10,7 +10,7 @@ public class TokenService(IConfiguration config) : ITokenService
 {
     public string CreateToken(AppUser user)
     {
-        var tokenKey = config["tokenKey"] ?? throw new Exception("Token key not found");
+        var tokenKey = config["TokenKey"] ?? throw new Exception("Token key not found");
         if (tokenKey.Length < 64) //since we are using HmacSha512
         {
             throw new Exception("Token key must be at least 64 characters long");
