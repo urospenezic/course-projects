@@ -15,13 +15,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddCors();
+builder.Services.AddScoped<API.Interfaces.ITokenService, API.Services.TokenService>();
 
 var app = builder.Build();
 
 app.UseCors(policy =>
-    policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
-          .AllowAnyHeader()
-          .AllowAnyMethod());
+    policy
+        .WithOrigins("http://localhost:4200", "https://localhost:4200")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+);
 
 // {
 //     app.MapOpenApi();
