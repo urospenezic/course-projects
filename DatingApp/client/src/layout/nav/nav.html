@@ -25,6 +25,7 @@
       <a>Chat</a>
     </nav>
     <div class="flex align-middle ml-auto gap-3">
+      @if(!accountService.currentUser(); as user) {
       <form #loginForm="ngForm" class="flex items-center gap-3" (ngSubmit)="login()">
         <input
           type="text"
@@ -44,6 +45,59 @@
         />
         <button class="btn btn-primary" type="submit">Login</button>
       </form>
+      }@else {
+      <button class="btn" popovertarget="popover-1" style="anchor-name: --anchor-1">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
+          />
+        </svg>
+      </button>
+      <ul
+        class="dropdown dropdown-end menu w-52 rounded-box bg-base-100 shadow-sm"
+        popover
+        id="popover-1"
+        style="position-anchor: --anchor-1"
+      >
+        <li><a>Home</a></li>
+        <li>
+          <a>
+            <div class="flex items-center gap-1">
+              <img src="/user.png" class="w-4 h-4 rounded-full" />
+              {{ accountService.currentUser()?.displayName }}'s Profile
+            </div>
+          </a>
+        </li>
+        <li>
+          <button class="btn" (click)="logout()">
+            <div class="flex flex-row items-center gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                class="size-4 mt-0.75"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M14 4.75A2.75 2.75 0 0 0 11.25 2h-3A2.75 2.75 0 0 0 5.5 4.75v.5a.75.75 0 0 0 1.5 0v-.5c0-.69.56-1.25 1.25-1.25h3c.69 0 1.25.56 1.25 1.25v6.5c0 .69-.56 1.25-1.25 1.25h-3c-.69 0-1.25-.56-1.25-1.25v-.5a.75.75 0 0 0-1.5 0v.5A2.75 2.75 0 0 0 8.25 14h3A2.75 2.75 0 0 0 14 11.25v-6.5Zm-9.47.47a.75.75 0 0 0-1.06 0L1.22 7.47a.75.75 0 0 0 0 1.06l2.25 2.25a.75.75 0 1 0 1.06-1.06l-.97-.97h7.19a.75.75 0 0 0 0-1.5H3.56l.97-.97a.75.75 0 0 0 0-1.06Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Logout
+            </div>
+          </button>
+        </li>
+      </ul>
+      }
     </div>
   </div>
 </header>

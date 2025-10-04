@@ -2,24 +2,29 @@ import { HttpClient } from '@angular/common/http';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { Nav } from '../layout/nav/nav';
+import { AccountService } from '../core/services/account-service';
+import { Home } from '../features/home/home';
+import { User } from '../types/user';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [Nav],
+  imports: [Nav, Home],
 })
 export class App implements OnInit {
+  private readonly accountService = inject(AccountService);
   protected readonly title = signal('Dating app');
   private readonly httpClient = inject(HttpClient);
   private readonly destroyRef = inject(DestroyRef);
 
-  protected members = signal<any[]>([]);
+  protected members = signal<User[]>([]);
 
   ngOnInit(): void {
+    this.setCurrentUser();
     //this.members.set(await this.getMembers() as any[]);
-    const request = this.httpClient.get('https://localhost:7241/api/members').subscribe({
-      next: (response) => this.members.set(response as any[]),
+    const request = this.httpClient.get<User[]>('https://localhost:7241/api/members').subscribe({
+      next: (response) => this.members.set(response),
       error: (err) => console.log(err),
       complete: () => console.log('Request completed'),
     });
@@ -27,6 +32,15 @@ export class App implements OnInit {
     this.destroyRef.onDestroy(() => {
       request.unsubscribe();
     });
+  }
+
+  setCurrentUser() {
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+      return;
+    }
+    const user = JSON.parse(userString);
+    this.accountService.currentUser.set(user);
   }
 
   // async getMembers() {

@@ -10,16 +10,13 @@ import { AccountService } from '../../core/services/account-service';
 })
 export class Nav {
   protected creds: any = {};
-
-  protected loggedIn = signal<boolean>(false);
-
-  private readonly accountService = inject(AccountService);
+  protected readonly accountService = inject(AccountService);
 
   login() {
     this.accountService.login(this.creds).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
-        this.loggedIn.set(true);
+        this.creds = {};
       },
       error: (error) => {
         alert('Login failed:' + error.message);
@@ -28,6 +25,6 @@ export class Nav {
   }
 
   logout() {
-    this.loggedIn.set(false);
+    this.accountService.logout();
   }
 }
