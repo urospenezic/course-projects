@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
+import { Nav } from '../layout/nav/nav';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
+  imports: [Nav],
 })
 export class App implements OnInit {
   protected readonly title = signal('Dating app');
@@ -14,7 +16,7 @@ export class App implements OnInit {
 
   protected members = signal<any[]>([]);
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     //this.members.set(await this.getMembers() as any[]);
     const request = this.httpClient.get('https://localhost:7241/api/members').subscribe({
       next: (response) => this.members.set(response as any[]),
