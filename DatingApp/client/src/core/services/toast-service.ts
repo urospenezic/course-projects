@@ -24,9 +24,9 @@ export class ToastService {
     const toastElement = document.createElement('div');
     toastElement.classList.add(`alert`, alertClass, `shadow-lg`);
     toastElement.innerHTML = `
-      <div>
+      <div class="flex items-center">
         <span>${message}</span>
-        <button class="ml-4 btn btn-sm btn-ghost"x</button>
+        <button class="ml-4 btn btn-sm text-accent-content bg-transparent border-transparent">x</button>
       </div>
     `;
 

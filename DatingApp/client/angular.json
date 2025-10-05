@@ -6,6 +6,10 @@
     "client": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:guard": {
+          "skipTests": true,
+          "path": "src/core/guards"
+        },
         "@schematics/angular:component": {
           "skipTests": true,
           "path": "src"
