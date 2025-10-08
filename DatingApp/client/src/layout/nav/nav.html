@@ -74,7 +74,10 @@
         <li>
           <a>
             <div class="flex items-center gap-1">
-              <img src="/user.png" class="w-4 h-4 rounded-full" />
+              <img
+                [src]="accountService.currentUser()?.imageUrl || '/user.png'"
+                class="w-4 h-4 rounded-full"
+              />
               {{ accountService.currentUser()?.displayName }}'s Profile
             </div>
           </a>
