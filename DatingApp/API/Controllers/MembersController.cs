@@ -1,5 +1,8 @@
+using System.Security.Claims;
 using API.Data;
+using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,19 +39,22 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateMember(Member updatedMember)
+        public async Task<ActionResult> UpdateMember(MemberUpdateDto updatedMember)
         {
-            var member = await memberRepository.GetMemberByIdAsync(updatedMember.Id);
+            var id = User.GetMemberId();
+            var member = await memberRepository.GetMemberByIdForUpdateAsync(id);
             if (member == null)
-                return NotFound();
-            member.DisplayName = updatedMember.DisplayName;
-            member.Description = updatedMember.Description;
-            member.City = updatedMember.City;
-            member.Country = updatedMember.Country;
-            member.ImageUrl = updatedMember.ImageUrl;
-            member.LastActive = DateTime.UtcNow;
-            memberRepository.Update(member);
-            return NoContent();
+                return NotFound("Member not found");
+            member.DisplayName = updatedMember.DisplayName ?? member.DisplayName;
+            member.City = updatedMember.City ?? member.City;
+            member.Country = updatedMember.Country ?? member.Country;
+            member.Description = updatedMember.Description ?? member.Description;
+            member.AppUser.DisplayName = updatedMember.DisplayName ?? member.AppUser.DisplayName; //sync display name between Member and AppUser
+
+            //memberRepository.Update(member);//optional
+            if (await memberRepository.SaveAllAsync())
+                return NoContent();
+            return BadRequest("Failed to update member");
         }
     }
 }

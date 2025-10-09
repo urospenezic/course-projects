@@ -14,4 +14,6 @@ public interface IMemberRepository
     Task<Member?> GetMemberByIdAsync(string id);
 
     Task<IEnumerable<Photo>> GetPhotosByMemberIdAsync(string memberId);
+
+    Task<Member?> GetMemberByIdForUpdateAsync(string id);
 }

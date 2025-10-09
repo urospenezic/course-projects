@@ -36,4 +36,11 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
             .SelectMany(m => m.Photos)
             .ToListAsync();
     }
+
+    public async Task<Member?> GetMemberByIdForUpdateAsync(string id)
+    {
+        return await _context
+            .Members.Include(member => member.AppUser)
+            .SingleOrDefaultAsync(member => member.Id == id);
+    }
 }
