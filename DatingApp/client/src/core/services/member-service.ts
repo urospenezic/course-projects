@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Member } from '../../types/member';
-import { AccountService } from './account-service';
-import { User } from '../../types/user';
+import { EditableMember, Member } from '../../types/member';
 import { Photo } from '../../types/photo';
+import { tap } from 'rxjs/internal/operators/tap';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +12,8 @@ export class MemberService {
   private readonly httpClient = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
 
+  public member = signal<Member | null>(null);
+
   //hacky way to have edit mode across components, should be replaced with state management
   public editMode = signal(false);
 
@@ -20,14 +21,16 @@ export class MemberService {
     return this.httpClient.get<Member[]>(`${this.apiUrl}/members`);
   }
   getMember(id: string) {
-    return this.httpClient.get<Member>(`${this.apiUrl}/members/${id}`);
+    return this.httpClient
+      .get<Member>(`${this.apiUrl}/members/${id}`)
+      .pipe(tap((member) => this.member.set(member)));
   }
 
   getMemberPhotos(id: string) {
     return this.httpClient.get<Photo[]>(`${this.apiUrl}/members/${id}/photos`);
   }
 
-  updateMember(member: Member) {
+  updateMember(member: EditableMember) {
     return this.httpClient.put(`${this.apiUrl}/members`, member);
   }
 

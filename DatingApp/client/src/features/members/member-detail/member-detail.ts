@@ -30,14 +30,7 @@ export class MemberDetail implements OnInit {
     return currentUser && currentUser.id === this.route.snapshot.paramMap.get('id');
   });
 
-  protected member = signal<Member | null>(null);
-
   ngOnInit(): void {
-    this.route.data.subscribe({
-      next: (data) => {
-        this.member.set(data['member']);
-      },
-    });
     this.title.set(this.route.firstChild?.snapshot.title || 'Profile');
 
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {

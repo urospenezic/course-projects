@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
 import { MemberService } from '../../../core/services/member-service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ToastService } from '../../../core/services/toast-service';
+import { AccountService } from '../../../core/services/account-service';
 
 @Component({
   selector: 'app-member-profile',
@@ -26,6 +27,7 @@ export class MemberProfile implements OnInit, OnDestroy {
   @ViewChild('editForm') editForm?: NgForm;
   private readonly route = inject(ActivatedRoute);
   protected memberService = inject(MemberService);
+  private readonly accountService = inject(AccountService);
   private readonly toastService = inject(ToastService);
 
   @HostListener('window:beforeunload', ['$event']) notify($event: BeforeUnloadEvent) {
@@ -34,37 +36,51 @@ export class MemberProfile implements OnInit, OnDestroy {
     }
   }
 
-  protected member = signal<Member | undefined>(undefined);
   protected editableMember = computed<EditableMember>(() => {
-    if (this.member()) {
+    if (this.memberService.member()) {
+      const member = this.memberService.member();
       return {
-        displayName: this.member()?.displayName || '',
-        city: this.member()?.city || '',
-        country: this.member()?.country || '',
-        description: this.member()?.description || '',
+        displayName: member?.displayName || '',
+        city: member?.city || '',
+        country: member?.country || '',
+        description: member?.description || '',
       };
     }
     return { displayName: '', city: '', country: '', description: '' };
   });
 
   ngOnInit(): void {
-    this.route.parent?.data.subscribe({
-      next: (data) => {
-        this.member.set(data['member']);
-      },
-    });
+    // this.route.parent?.data.subscribe({
+    //   next: (data) => {
+    //     this.member.set(data['member']);
+    //   },
+    // });
   }
   ngOnDestroy(): void {
     this.memberService.editMode.set(false);
   }
 
   updateMember() {
-    if (!this.member()) {
+    if (!this.memberService.member()) {
       return;
     }
 
-    var updatedMember = { ...this.member(), ...this.editableMember() };
-    this.toastService.success('Profile updated successfully');
-    this.memberService.editMode.set(false);
+    var updatedMember = { ...this.memberService.member(), ...this.editableMember() };
+
+    this.memberService.updateMember(this.editableMember()).subscribe({
+      next: () => {
+        this.toastService.success('Profile updated successfully');
+        this.memberService.editMode.set(false);
+        this.editForm?.reset(updatedMember);
+        this.memberService.member.set(updatedMember as Member);
+        const currentUser = this.accountService.currentUser();
+        if (currentUser && currentUser.displayName !== updatedMember.displayName) {
+          this.accountService.setCurrentUser({
+            ...currentUser,
+            displayName: updatedMember.displayName,
+          });
+        }
+      },
+    });
   }
 }
