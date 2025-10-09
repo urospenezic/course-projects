@@ -14,7 +14,7 @@ export class AccountService {
   currentUser = signal<User | null>(null);
 
   login(creds: any) {
-    return this.httpClient.post<User>(this.baseUrl + 'account/login', creds).pipe(
+    return this.httpClient.post<User>(this.baseUrl + '/account/login', creds).pipe(
       tap((user) => {
         this.setCurrentUser(user);
       })
@@ -27,7 +27,7 @@ export class AccountService {
   }
 
   register(creds: RegisterCreds) {
-    return this.httpClient.post<User>(this.baseUrl + 'account/register', creds).pipe(
+    return this.httpClient.post<User>(this.baseUrl + '/account/register', creds).pipe(
       tap((user) => {
         this.setCurrentUser(user);
       })

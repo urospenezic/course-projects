@@ -2,6 +2,7 @@ export interface User {
   displayName: string;
   email: string;
   token: string;
+  id: string;
   imageUrl?: string;
 }
 
