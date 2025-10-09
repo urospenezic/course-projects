@@ -23,4 +23,11 @@ export class MemberPhotos {
       this.photos$ = this.memberService.getMemberPhotos(id);
     }
   }
+
+  get photoMocks() {
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      url: `/user.png`,
+    }));
+  }
 }

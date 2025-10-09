@@ -6,6 +6,10 @@
     "client": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:pipe": {
+          "skipTests": true,
+          "path": "src/core/pipes"
+        },
         "@schematics/angular:guard": {
           "skipTests": true,
           "path": "src/core/guards"
