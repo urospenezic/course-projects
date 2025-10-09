@@ -10,6 +10,10 @@
           "skipTests": true,
           "path": "src/core/guards"
         },
+        "@schematics/angular:resolver": {
+          "skipTests": true,
+          "path": "src"
+        },
         "@schematics/angular:component": {
           "skipTests": true,
           "path": "src"

@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Member } from '../../types/member';
 import { AccountService } from './account-service';
 import { User } from '../../types/user';
+import { Photo } from '../../types/photo';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,10 @@ export class MemberService {
   }
   getMember(id: string) {
     return this.httpClient.get<Member>(`${this.apiUrl}/members/${id}`);
+  }
+
+  getMemberPhotos(id: string) {
+    return this.httpClient.get<Photo[]>(`${this.apiUrl}/members/${id}/photos`);
   }
 
   updateMember(member: Member) {
