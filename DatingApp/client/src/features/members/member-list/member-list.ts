@@ -17,6 +17,8 @@ export class MemberList {
   protected members$: Observable<Member[]>;
 
   constructor() {
+    // Clear individual member data when viewing the list
+    this.memberService.member.set(null);
     this.members$ = this.memberService.getMembers();
   }
 }

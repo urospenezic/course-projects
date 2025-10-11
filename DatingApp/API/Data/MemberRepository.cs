@@ -41,6 +41,7 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
     {
         return await _context
             .Members.Include(member => member.AppUser)
+            .Include(member => member.Photos)
             .SingleOrDefaultAsync(member => member.Id == id);
     }
 }

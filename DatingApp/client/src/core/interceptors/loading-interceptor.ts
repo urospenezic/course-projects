@@ -8,10 +8,11 @@ const cache = new Map<string, HttpEvent<unknown>>();
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const busyService = inject(BusyService);
 
-  if (req.method === 'GET') {
+  if (req.method === 'GET' && shouldCache(req.url)) {
     const cachedResponse = cache.get(req.url);
     if (cachedResponse) {
-      return of(cachedResponse);
+      // Return cached response with proper Observable timing to trigger async pipes
+      return of(cachedResponse).pipe(delay(1));
     }
   }
 
@@ -19,10 +20,18 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     delay(500),
     tap((response) => {
-      if (req.method === 'GET' && cache.has(req.url) === false) {
+      if (req.method === 'GET' && shouldCache(req.url) && response) {
         cache.set(req.url, response);
       }
     }),
     finalize(() => busyService.idle())
   );
 };
+
+function shouldCache(url: string): boolean {
+  return url.includes('/members') && !url.includes('/members/') && !url.includes('/photos');
+}
+
+export function clearInterceptorCache(): void {
+  cache.clear();
+}

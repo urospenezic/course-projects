@@ -34,6 +34,12 @@ export class MemberService {
     return this.httpClient.put(`${this.apiUrl}/members`, member);
   }
 
+  uploadPhoto(photo: File) {
+    const formData = new FormData();
+    formData.append('file', photo);
+    return this.httpClient.post<Photo>(`${this.apiUrl}/members/upload-photo`, formData);
+  }
+
   setMainPhoto(photoId: number) {
     return this.httpClient.put(`${this.apiUrl}/members/set-main-photo/${photoId}`, {});
   }
