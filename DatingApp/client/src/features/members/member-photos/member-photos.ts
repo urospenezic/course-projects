@@ -1,21 +1,25 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MemberService } from '../../../core/services/member-service';
 import { ActivatedRoute } from '@angular/router';
 import { Photo } from '../../../types/photo';
 import { AsyncPipe } from '@angular/common';
 import { ImageUpload } from '../../../shared/image-upload/image-upload';
+import { AccountService } from '../../../core/services/account-service';
+import { Member } from '../../../types/member';
+import { HoverButton } from "../../../shared/hover-button/hover-button";
 
 @Component({
   selector: 'app-member-photos',
-  imports: [ImageUpload],
+  imports: [ImageUpload, HoverButton],
+  schemas: [NO_ERRORS_SCHEMA],
   templateUrl: './member-photos.html',
   styleUrl: './member-photos.css',
 })
 export class MemberPhotos implements OnInit {
   protected readonly memberService = inject(MemberService);
+  private readonly accountService = inject(AccountService);
   private readonly route = inject(ActivatedRoute);
   protected loading = signal<boolean>(false);
-
   protected photos = signal<Photo[]>([]);
 
   ngOnInit(): void {
@@ -44,6 +48,35 @@ export class MemberPhotos implements OnInit {
       },
       complete: () => {
         this.loading.set(false);
+      },
+    });
+  }
+
+  setMainPhoto(photo: Photo) {
+    const photoId = photo.id;
+    this.memberService.setMainPhoto(photoId).subscribe({
+      next: () => {
+        const member = this.memberService.member();
+        const currentUser = this.accountService.currentUser();
+
+        if (member && currentUser) {
+          const mainPhoto = this.photos().find((p) => p.id === photoId);
+          this.memberService.member.update(
+            (member) =>
+              ({
+                ...member,
+                imageUrl: mainPhoto?.url || member?.imageUrl,
+              } as Member)
+          );
+
+          this.accountService.setCurrentUser({
+            ...currentUser,
+            imageUrl: mainPhoto?.url || currentUser.imageUrl,
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error setting main photo:', err);
       },
     });
   }
