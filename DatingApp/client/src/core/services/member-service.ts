@@ -37,7 +37,7 @@ export class MemberService {
   uploadPhoto(photo: File) {
     const formData = new FormData();
     formData.append('file', photo);
-    return this.httpClient.post<Photo>(`${this.apiUrl}/members/upload-photo`, formData);
+    return this.httpClient.post<Photo>(`${this.apiUrl}/members/add-photo`, formData);
   }
 
   setMainPhoto(photoId: number) {
