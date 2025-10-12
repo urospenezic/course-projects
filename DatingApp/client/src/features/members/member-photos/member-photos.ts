@@ -6,7 +6,7 @@ import { AsyncPipe } from '@angular/common';
 import { ImageUpload } from '../../../shared/image-upload/image-upload';
 import { AccountService } from '../../../core/services/account-service';
 import { Member } from '../../../types/member';
-import { HoverButton } from "../../../shared/hover-button/hover-button";
+import { HoverButton } from '../../../shared/hover-button/hover-button';
 
 @Component({
   selector: 'app-member-photos',
@@ -77,6 +77,18 @@ export class MemberPhotos implements OnInit {
       },
       error: (err) => {
         console.error('Error setting main photo:', err);
+      },
+    });
+  }
+
+  deletePhoto(photo: Photo) {
+    const photoId = photo.id;
+    this.memberService.deletePhoto(photoId).subscribe({
+      next: () => {
+        this.photos.update((photos) => photos.filter((p) => p.id !== photoId));
+      },
+      error: (err) => {
+        console.error('Error deleting photo:', err);
       },
     });
   }

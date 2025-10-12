@@ -1,19 +1,19 @@
 <button
-  [class]="'absolute z-50 cursor-pointer ' + positionClasses()"
+  [class]="
+    'absolute z-[100] cursor-pointer bg-black/30 backdrop-blur-sm rounded-full p-2 ' +
+    positionClasses()
+  "
   (click)="onClick($event)"
   [disabled]="disabled()"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    [attr.fill]="selected() ? 'currentColor' : 'none'"
+    [attr.fill]="selected() ? selectedFill() : unselectedFill()"
     viewBox="0 0 24 24"
     stroke-width="1.5"
     stroke="currentColor"
-    class="size-8 stroke-2"
-    [class.text-yellow-200]="selected()"
-    [class.stroke-white]="!selected()"
+    [class]="'w-5 h-5 ' + (selected() ? selectedColor() : unselectedColor())"
   >
-    <!-- Only accept path elements -->
-    <ng-content select="path"></ng-content>
+    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="pathData()" />
   </svg>
 </button>
