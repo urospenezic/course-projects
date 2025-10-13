@@ -42,6 +42,10 @@ export class MemberPhotos implements OnInit {
       next: (photo) => {
         this.memberService.editMode.set(false);
         this.photos.update((photos) => [...photos, photo as Photo]);
+
+        if (!this.memberService.member()?.imageUrl) {
+          this.setMainLocalPhoto(photo as Photo);
+        }
       },
       error: (err) => {
         console.error('Error uploading photo:', err);
@@ -53,27 +57,9 @@ export class MemberPhotos implements OnInit {
   }
 
   setMainPhoto(photo: Photo) {
-    const photoId = photo.id;
-    this.memberService.setMainPhoto(photoId).subscribe({
+    this.memberService.setMainPhoto(photo.id).subscribe({
       next: () => {
-        const member = this.memberService.member();
-        const currentUser = this.accountService.currentUser();
-
-        if (member && currentUser) {
-          const mainPhoto = this.photos().find((p) => p.id === photoId);
-          this.memberService.member.update(
-            (member) =>
-              ({
-                ...member,
-                imageUrl: mainPhoto?.url || member?.imageUrl,
-              } as Member)
-          );
-
-          this.accountService.setCurrentUser({
-            ...currentUser,
-            imageUrl: mainPhoto?.url || currentUser.imageUrl,
-          });
-        }
+        this.setMainLocalPhoto(photo);
       },
       error: (err) => {
         console.error('Error setting main photo:', err);
@@ -91,5 +77,27 @@ export class MemberPhotos implements OnInit {
         console.error('Error deleting photo:', err);
       },
     });
+  }
+
+  private setMainLocalPhoto(photo: Photo) {
+    const photoId = photo.id;
+    const member = this.memberService.member();
+    const currentUser = this.accountService.currentUser();
+
+    if (member && currentUser) {
+      const mainPhoto = this.photos().find((p) => p.id === photoId);
+      this.memberService.member.update(
+        (member) =>
+          ({
+            ...member,
+            imageUrl: mainPhoto?.url || member?.imageUrl,
+          } as Member)
+      );
+
+      this.accountService.setCurrentUser({
+        ...currentUser,
+        imageUrl: mainPhoto?.url || currentUser.imageUrl,
+      });
+    }
   }
 }
