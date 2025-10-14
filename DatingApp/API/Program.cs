@@ -21,6 +21,7 @@ builder.Services.AddCors();
 builder.Services.AddScoped<API.Interfaces.IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<API.Interfaces.ITokenService, API.Services.TokenService>();
 builder.Services.AddScoped<API.Interfaces.IPhotoService, API.Services.PhotoService>();
+builder.Services.AddScoped<API.Helpers.LogUserActivity>();
 builder.Services.Configure<API.Helpers.CloudinarySettings>(
     builder.Configuration.GetSection("CloudinarySettings")
 );
