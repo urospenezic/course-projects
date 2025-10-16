@@ -20,6 +20,12 @@ public class Member
     public required string City { get; set; }
     public required string Country { get; set; }
 
+    [JsonIgnore]
+    public List<MemberLike> LikedByMembers { get; set; } = [];
+
+    [JsonIgnore]
+    public List<MemberLike> LikedMembers { get; set; } = [];
+
     //Nav property
     [ForeignKey(nameof(Id))]
     [JsonIgnore]
