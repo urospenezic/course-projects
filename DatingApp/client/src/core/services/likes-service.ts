@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Member } from '../../types/member';
+import { PaginatedResult } from '../../types/pagination';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,16 @@ export class LikesService {
     return this.http.post(this.baseUrl + '/' + targetMemberId, {});
   }
 
-  getLikes(predicate: string) {
-    return this.http.get<Member[]>(this.baseUrl + '?predicate=' + predicate);
+  getLikes(predicate: string, pageNumber: number, pageSize: number) {
+    return this.http.get<PaginatedResult<Member>>(
+      this.baseUrl +
+        '?predicate=' +
+        predicate +
+        '&pageNumber=' +
+        pageNumber +
+        '&pageSize=' +
+        pageSize
+    );
   }
 
   getLikeIds() {
