@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.AddCors();
 
+builder.Services.AddScoped<API.Interfaces.IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<API.Interfaces.IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<API.Interfaces.ILikesRepository, LikesRepository>();
 builder.Services.AddScoped<API.Interfaces.ITokenService, API.Services.TokenService>();
