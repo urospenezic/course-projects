@@ -9,4 +9,5 @@ export interface Message {
   senderImageUrl: string;
   recipientImageUrl: string;
   messageSent: string;
+  currentUserSender?: boolean;
 }
