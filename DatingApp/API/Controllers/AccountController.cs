@@ -3,12 +3,14 @@ using API.DTOs;
 using API.Entities;
 using API.Extensions;
 using API.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-public class AccountController(AppDbContext context, ITokenService tokenService) : BaseApiController
+public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
+    : BaseApiController
 {
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
@@ -16,26 +18,19 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
         var email = loginDto.Email.ToLower();
         var password = loginDto.Password;
 
-        var user = await context.Users.SingleOrDefaultAsync(x =>
-            x.Email.ToLower() == email.ToLower()
-        );
+        var user = await userManager.FindByEmailAsync(email);
         if (user is null)
         {
             return Unauthorized("Invalid email");
         }
 
-        var hmac = new System.Security.Cryptography.HMACSHA512(user.PasswordSalt);
-        var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-        for (int i = 0; i < computedHash.Length; i++)
+        var result = await userManager.CheckPasswordAsync(user, password);
+        if (!result)
         {
-            if (computedHash[i] != user.PasswordHash[i])
-            {
-                return Unauthorized("Invalid password");
-            }
+            return Unauthorized("Invalid password");
         }
 
-        hmac.Dispose();
-        return Ok(user.ToDto(tokenService));
+        return Ok(await user.ToDto(tokenService));
     }
 
     [HttpPost("register")]
@@ -44,19 +39,11 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
         var displayName = registerDto.DisplayName;
         var email = registerDto.Email.ToLower();
         var password = registerDto.Password;
-
-        if (await EmailExists(email))
-        {
-            return BadRequest("Email is already taken");
-        }
-
-        var hmac = new System.Security.Cryptography.HMACSHA512();
         var user = new AppUser
         {
             Email = email,
             DisplayName = displayName,
-            PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)),
-            PasswordSalt = hmac.Key,
+            UserName = registerDto.Email,
             Member = new Member()
             {
                 Gender = registerDto.Gender,
@@ -67,15 +54,18 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
             },
         };
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+        var result = await userManager.CreateAsync(user, password);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("identity", error.Description);
+            }
+            return ValidationProblem(ModelState);
+        }
 
-        hmac.Dispose();
-        return Ok(user.ToDto(tokenService));
-    }
+        await userManager.AddToRoleAsync(user, "Member");
 
-    private async Task<bool> EmailExists(string email)
-    {
-        return await context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower());
+        return Ok(await user.ToDto(tokenService));
     }
 }

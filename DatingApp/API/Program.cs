@@ -1,6 +1,7 @@
 using API.Data;
 using API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -27,6 +28,16 @@ builder.Services.AddScoped<API.Helpers.LogUserActivity>();
 builder.Services.Configure<API.Helpers.CloudinarySettings>(
     builder.Configuration.GetSection("CloudinarySettings")
 );
+
+builder
+    .Services.AddIdentityCore<API.Entities.AppUser>(options =>
+    {
+        options.Password.RequireNonAlphanumeric = false;
+        options.User.RequireUniqueEmail = true;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
 builder
     .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -44,6 +55,11 @@ builder
             ValidateAudience = false,
         };
     });
+
+builder
+    .Services.AddAuthorizationBuilder()
+    .AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"))
+    .AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
@@ -72,8 +88,9 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<AppDbContext>();
+    var userManager = services.GetRequiredService<UserManager<API.Entities.AppUser>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedUsers(context);
+    await Seed.SeedUsers(userManager);
 }
 catch (Exception ex)
 {
