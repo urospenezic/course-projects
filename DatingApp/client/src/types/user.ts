@@ -4,6 +4,7 @@ export interface User {
   token: string;
   id: string;
   imageUrl?: string;
+  roles: string[];
 }
 
 export interface LoginCreds {

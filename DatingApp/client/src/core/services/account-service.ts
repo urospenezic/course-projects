@@ -30,6 +30,12 @@ export class AccountService {
     this.currentUser.set(null);
   }
 
+  private getRolesFromToken(user: User): string[] {
+    const token = user.token;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return Array.isArray(payload.role) ? payload.role : [payload.role];
+  }
+
   register(creds: RegisterCreds) {
     return this.httpClient.post<User>(this.baseUrl + '/account/register', creds).pipe(
       tap((user) => {
@@ -40,6 +46,8 @@ export class AccountService {
 
   setCurrentUser(user: User) {
     if (!user) return;
+
+    user.roles = this.getRolesFromToken(user);
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUser.set(user);
     this.likesService.getLikeIds();
